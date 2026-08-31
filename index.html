@@ -1,0 +1,2939 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Complaint Management System</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #06b6d4;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --danger: #dc2626;
+            --info: #2563eb;
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --sidebar: #111827;
+        }
+
+        body.dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --border: #334155;
+            --sidebar: #020617;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: 0.3s;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* LOGIN */
+
+        #loginPage {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at top left, #6366f1, transparent 35%),
+                radial-gradient(circle at bottom right, #06b6d4, transparent 35%),
+                #111827;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 600px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+        }
+
+        .login-brand {
+            background: linear-gradient(145deg, #4338ca, #0891b2);
+            color: white;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.2);
+            font-size: 32px;
+            margin-bottom: 25px;
+        }
+
+        .login-brand h1 {
+            font-size: 38px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .login-brand p {
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .login-features {
+            margin-top: 35px;
+        }
+
+        .login-features div {
+            margin: 15px 0;
+        }
+
+        .login-features i {
+            margin-right: 10px;
+        }
+
+        .login-box {
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-box h2 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .login-box .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .role-switch {
+            display: flex;
+            background: #f3f4f6;
+            padding: 5px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .role-switch button {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .role-switch button.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select,
+        .input-wrapper textarea {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 13px 15px 13px 45px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .input-wrapper textarea {
+            min-height: 120px;
+            resize: vertical;
+            padding-left: 15px;
+        }
+
+        .input-wrapper input:focus,
+        .input-wrapper select:focus,
+        .input-wrapper textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,70,229,.1);
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0 25px;
+            font-size: 13px;
+        }
+
+        .login-options label {
+            color: #6b7280;
+        }
+
+        .primary-btn {
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79,70,229,.25);
+        }
+
+        /* APP */
+
+        #app {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            color: white;
+            padding: 25px 15px;
+            transition: .3s;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px 30px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand h2 {
+            font-size: 16px;
+        }
+
+        .brand span {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .nav-title {
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin: 25px 10px 10px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px 13px;
+            margin: 5px 0;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(99,102,241,.2);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 20px;
+        }
+
+        .main {
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 75px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-btn {
+            display: none;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .search {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 15px;
+            width: 260px;
+            color: var(--text);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .profile-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg,#6366f1,#06b6d4);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .profile-mini small {
+            color: var(--muted);
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 30px;
+        }
+
+        .page {
+            display: none;
+            animation: fade .3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 27px;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            transition: .25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.07);
+        }
+
+        .stat-card p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h2 {
+            font-size: 28px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef2ff;
+            color: var(--primary);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .card-header h3 {
+            font-size: 17px;
+        }
+
+        .view-link {
+            color: var(--primary);
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            padding: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 15px 13px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: rgba(99,102,241,.03);
+        }
+
+        .badge {
+            display: inline-flex;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.progress {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge.resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge.high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .badge.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .action-btn {
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            padding: 7px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* FILTER */
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            padding: 9px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 3px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        textarea.form-control {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .file-box {
+            border: 2px dashed var(--border);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .file-box i {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* TIMELINE */
+
+        .timeline {
+            position: relative;
+            margin: 25px 0;
+        }
+
+        .timeline:before {
+            content: "";
+            position: absolute;
+            left: 19px;
+            top: 5px;
+            bottom: 5px;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 55px;
+            margin-bottom: 28px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 8px;
+            width: 23px;
+            height: 23px;
+            border-radius: 50%;
+            background: var(--border);
+            border: 5px solid var(--card);
+        }
+
+        .timeline-item.completed .timeline-dot {
+            background: var(--success);
+        }
+
+        .timeline-item h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .timeline-item p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* CHARTS */
+
+        .chart {
+            height: 230px;
+            display: flex;
+            align-items: end;
+            gap: 15px;
+            padding: 20px 10px 0;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top,#4f46e5,#06b6d4);
+            border-radius: 7px 7px 0 0;
+            min-height: 15px;
+            position: relative;
+        }
+
+        .bar span {
+            position: absolute;
+            bottom: -25px;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .bar strong {
+            position: absolute;
+            top: -22px;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .donut {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #4f46e5 0 40%,
+                #06b6d4 40% 65%,
+                #22c55e 65% 88%,
+                #f59e0b 88% 100%
+            );
+            position: relative;
+            margin: auto;
+        }
+
+        .donut:after {
+            content: "Complaints";
+            position: absolute;
+            inset: 35px;
+            border-radius: 50%;
+            background: var(--card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* DEPARTMENTS */
+
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 18px;
+        }
+
+        .department-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 22px;
+            border-radius: 15px;
+            text-align: center;
+            transition: .25s;
+        }
+
+        .department-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,.06);
+        }
+
+        .department-icon {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef2ff;
+            color: var(--primary);
+            font-size: 22px;
+        }
+
+        /* PROFILE */
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .large-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg,#4f46e5,#06b6d4);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        /* TOAST */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #111827;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 5000;
+            box-shadow: 0 15px 30px rgba(0,0,0,.2);
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .department-grid {
+                grid-template-columns: repeat(2,1fr);
+            }
+        }
+
+        @media(max-width:850px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-brand {
+                display: none;
+            }
+        }
+
+        @media(max-width:600px) {
+            .content {
+                padding: 18px;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .search {
+                display: none;
+            }
+
+            .profile-mini div {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .department-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .login-box {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN PAGE ================= -->
+
+<section id="loginPage">
+
+    <div class="login-container">
+
+        <div class="login-brand">
+
+            <div class="logo">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <h1>Smart Complaint Management System</h1>
+
+            <p>
+                A centralized digital platform for students and college
+                administrators to submit, track and resolve complaints efficiently.
+            </p>
+
+            <div class="login-features">
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Easy complaint submission
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Real-time complaint tracking
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Faster issue resolution
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Transparent administration
+                </div>
+            </div>
+
+        </div>
+
+        <div class="login-box">
+
+            <h2>Welcome Back 👋</h2>
+            <p class="subtitle">Sign in to access your college portal</p>
+
+            <div class="role-switch">
+                <button class="active" onclick="setRole('student',this)">
+                    Student
+                </button>
+
+                <button onclick="setRole('admin',this)">
+                    Administrator
+                </button>
+            </div>
+
+            <form onsubmit="login(event)">
+
+                <div class="input-group">
+
+                    <label>Email / Username</label>
+
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Enter username"
+                            required>
+                    </div>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Password</label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter password"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <div class="login-options">
+
+                    <label>
+                        <input type="checkbox">
+                        Remember me
+                    </label>
+
+                    <span style="color:#4f46e5;cursor:pointer;">
+                        Forgot Password?
+                    </span>
+
+                </div>
+
+                <button class="primary-btn" style="width:100%;">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Sign In
+                </button>
+
+            </form>
+
+            <p style="text-align:center;margin-top:20px;font-size:12px;color:#9ca3af;">
+                Demo: student / 1234 &nbsp; | &nbsp; admin / admin123
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= APPLICATION ================= -->
+
+<section id="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <div>
+                <h2>SmartCMS</h2>
+                <span>College Portal</span>
+            </div>
+
+        </div>
+
+
+        <div class="nav-title">Main Menu</div>
+
+        <div class="nav-item active" onclick="showPage('dashboard',this)">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
+        </div>
+
+        <div class="nav-item" onclick="showPage('submit',this)">
+            <i class="fa-solid fa-plus-circle"></i>
+            Submit Complaint
+        </div>
+
+        <div class="nav-item" onclick="showPage('complaints',this)">
+            <i class="fa-solid fa-list-check"></i>
+            My Complaints
+        </div>
+
+
+        <div class="nav-title">Administration</div>
+
+        <div class="nav-item" onclick="showPage('admin',this)">
+            <i class="fa-solid fa-gauge-high"></i>
+            Admin Dashboard
+        </div>
+
+        <div class="nav-item" onclick="showPage('adminComplaints',this)">
+            <i class="fa-solid fa-folder-open"></i>
+            Manage Complaints
+        </div>
+
+        <div class="nav-item" onclick="showPage('departments',this)">
+            <i class="fa-solid fa-building"></i>
+            Departments
+        </div>
+
+        <div class="nav-item" onclick="showPage('reports',this)">
+            <i class="fa-solid fa-chart-column"></i>
+            Reports
+        </div>
+
+
+        <div class="nav-title">Account</div>
+
+        <div class="nav-item" onclick="showPage('profile',this)">
+            <i class="fa-solid fa-user"></i>
+            Profile
+        </div>
+
+        <div class="nav-item" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button class="menu-btn" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <input class="search"
+                       type="text"
+                       placeholder="Search complaints...">
+
+            </div>
+
+            <div class="top-actions">
+
+                <button class="icon-btn" onclick="toggleDarkMode()">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+
+                <button class="icon-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </button>
+
+                <div class="profile-mini">
+
+                    <div class="avatar">JS</div>
+
+                    <div>
+                        <strong id="topName">Jinesh</strong>
+                        <br>
+                        <small id="topRole">Student</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+
+            <!-- ================= STUDENT DASHBOARD ================= -->
+
+            <section class="page active" id="dashboard">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Good Morning, Jinesh 👋</h1>
+                        <p>Here's what's happening with your complaints.</p>
+                    </div>
+
+                    <button class="primary-btn"
+                            onclick="showPage('submit')">
+
+                        <i class="fa-solid fa-plus"></i>
+                        New Complaint
+
+                    </button>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div>
+                            <p>Total Complaints</p>
+                            <h2>12</h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div>
+                            <p>Pending</p>
+                            <h2>03</h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div>
+                            <p>In Progress</p>
+                            <h2>04</h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-spinner"></i>
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div>
+                            <p>Resolved</p>
+                            <h2>05</h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h3>Recent Complaints</h3>
+
+                            <span class="view-link"
+                                  onclick="showPage('complaints')">
+                                View All
+                            </span>
+
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Complaint</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                <tr>
+                                    <td>#CMP1024</td>
+                                    <td>Wi-Fi connectivity issue</td>
+                                    <td>IT / Network</td>
+                                    <td>
+                                        <span class="badge progress">
+                                            In Progress
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>#CMP1023</td>
+                                    <td>Classroom projector issue</td>
+                                    <td>Classroom</td>
+                                    <td>
+                                        <span class="badge pending">
+                                            Pending
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>#CMP1020</td>
+                                    <td>Hostel water problem</td>
+                                    <td>Hostel</td>
+                                    <td>
+                                        <span class="badge resolved">
+                                            Resolved
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Status Overview</h3>
+                        </div>
+
+                        <div class="donut"></div>
+
+                        <div style="margin-top:20px;">
+
+                            <p style="font-size:13px;margin:10px;">
+                                <i class="fa-solid fa-circle"
+                                   style="color:#4f46e5;"></i>
+                                Pending — 25%
+                            </p>
+
+                            <p style="font-size:13px;margin:10px;">
+                                <i class="fa-solid fa-circle"
+                                   style="color:#06b6d4;"></i>
+                                In Progress — 35%
+                            </p>
+
+                            <p style="font-size:13px;margin:10px;">
+                                <i class="fa-solid fa-circle"
+                                   style="color:#22c55e;"></i>
+                                Resolved — 40%
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= SUBMIT COMPLAINT ================= -->
+
+            <section class="page" id="submit">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Submit a Complaint</h1>
+                        <p>Tell us about the issue you are facing.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <form onsubmit="submitComplaint(event)">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Student Name</label>
+
+                                <input class="form-control"
+                                       value="Jinesh"
+                                       required>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>Student ID</label>
+
+                                <input class="form-control"
+                                       placeholder="Enter student ID"
+                                       required>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>Department</label>
+
+                                <select class="form-control" required>
+
+                                    <option value="">Select Department</option>
+                                    <option>CSE</option>
+                                    <option>IT</option>
+                                    <option>ECE</option>
+                                    <option>Mechanical</option>
+                                    <option>Civil</option>
+                                    <option>Administration</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>Complaint Category</label>
+
+                                <select class="form-control" required>
+
+                                    <option value="">Select Category</option>
+                                    <option>Classroom</option>
+                                    <option>Hostel</option>
+                                    <option>Laboratory</option>
+                                    <option>Library</option>
+                                    <option>Transport</option>
+                                    <option>Canteen</option>
+                                    <option>Infrastructure</option>
+                                    <option>IT/Network</option>
+                                    <option>Faculty</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label>Complaint Title</label>
+
+                                <input class="form-control"
+                                       placeholder="Enter a short title"
+                                       required>
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label>Detailed Description</label>
+
+                                <textarea class="form-control"
+                                          placeholder="Explain your complaint in detail..."
+                                          required></textarea>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>Location</label>
+
+                                <input class="form-control"
+                                       placeholder="Example: Block A - Room 204">
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>Priority</label>
+
+                                <select class="form-control">
+
+                                    <option>Low</option>
+                                    <option selected>Medium</option>
+                                    <option>High</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label>Attachment</label>
+
+                                <div class="file-box">
+
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                                    <p>
+                                        Upload an image or document
+                                    </p>
+
+                                    <input type="file"
+                                           style="margin-top:10px;">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="margin-top:25px;text-align:right;">
+
+                            <button type="reset"
+                                    class="filter-btn">
+                                Clear
+                            </button>
+
+                            <button class="primary-btn"
+                                    type="submit">
+
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Submit Complaint
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= MY COMPLAINTS ================= -->
+
+            <section class="page" id="complaints">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>My Complaints</h1>
+                        <p>Track all your submitted complaints.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="filters">
+
+                    <button class="filter-btn active">
+                        All
+                    </button>
+
+                    <button class="filter-btn">
+                        Pending
+                    </button>
+
+                    <button class="filter-btn">
+                        In Progress
+                    </button>
+
+                    <button class="filter-btn">
+                        Resolved
+                    </button>
+
+                    <button class="filter-btn">
+                        Rejected
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                            <tr>
+                                <th>Complaint ID</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td>#CMP1024</td>
+                                <td>Wi-Fi connectivity issue</td>
+                                <td>IT/Network</td>
+                                <td>31 Aug 2026</td>
+                                <td>
+                                    <span class="badge high">
+                                        High
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge progress">
+                                        In Progress
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="action-btn"
+                                            onclick="showPage('details')">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>#CMP1023</td>
+                                <td>Projector not working</td>
+                                <td>Classroom</td>
+                                <td>29 Aug 2026</td>
+                                <td>
+                                    <span class="badge medium">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge pending">
+                                        Pending
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="action-btn"
+                                            onclick="showPage('details')">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>#CMP1020</td>
+                                <td>Hostel water issue</td>
+                                <td>Hostel</td>
+                                <td>22 Aug 2026</td>
+                                <td>
+                                    <span class="badge high">
+                                        High
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge resolved">
+                                        Resolved
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="action-btn"
+                                            onclick="showPage('details')">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= COMPLAINT DETAILS ================= -->
+
+            <section class="page" id="details">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Complaint Details</h1>
+                        <p>Complaint #CMP1024</p>
+                    </div>
+
+                    <span class="badge progress">
+                        In Progress
+                    </span>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Complaint Information</h3>
+                        </div>
+
+                        <p><strong>Complaint ID:</strong> #CMP1024</p>
+                        <br>
+
+                        <p><strong>Title:</strong> Wi-Fi connectivity issue</p>
+                        <br>
+
+                        <p><strong>Student:</strong> Jinesh</p>
+                        <br>
+
+                        <p><strong>Student ID:</strong> STU2026</p>
+                        <br>
+
+                        <p><strong>Category:</strong> IT / Network</p>
+                        <br>
+
+                        <p><strong>Location:</strong> Block A - Lab 2</p>
+                        <br>
+
+                        <p><strong>Priority:</strong>
+                            <span class="badge high">High</span>
+                        </p>
+
+                        <br>
+
+                        <p>
+                            <strong>Description:</strong>
+                        </p>
+
+                        <p style="color:var(--muted);line-height:1.7;margin-top:8px;">
+                            Internet connectivity is unstable in the laboratory.
+                            Students are unable to access online learning platforms
+                            and required academic resources.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Status Timeline</h3>
+                        </div>
+
+                        <div class="timeline">
+
+                            <div class="timeline-item completed">
+
+                                <div class="timeline-dot"></div>
+
+                                <h4>Complaint Submitted</h4>
+
+                                <p>
+                                    31 Aug 2026 · 09:15 AM
+                                </p>
+
+                            </div>
+
+
+                            <div class="timeline-item completed">
+
+                                <div class="timeline-dot"></div>
+
+                                <h4>Under Review</h4>
+
+                                <p>
+                                    31 Aug 2026 · 10:20 AM
+                                </p>
+
+                            </div>
+
+
+                            <div class="timeline-item completed">
+
+                                <div class="timeline-dot"></div>
+
+                                <h4>Assigned to IT Department</h4>
+
+                                <p>
+                                    31 Aug 2026 · 11:00 AM
+                                </p>
+
+                            </div>
+
+
+                            <div class="timeline-item completed">
+
+                                <div class="timeline-dot"></div>
+
+                                <h4>In Progress</h4>
+
+                                <p>
+                                    31 Aug 2026 · 11:45 AM
+                                </p>
+
+                            </div>
+
+
+                            <div class="timeline-item">
+
+                                <div class="timeline-dot"></div>
+
+                                <h4>Resolved</h4>
+
+                                <p>
+                                    Waiting for resolution
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Admin Remarks</h3>
+
+                    <p style="margin-top:12px;color:var(--muted);">
+                        IT team has been notified and is currently checking
+                        the network infrastructure.
+                    </p>
+
+                    <br>
+
+                    <h3>Resolution Details</h3>
+
+                    <p style="margin-top:12px;color:var(--muted);">
+                        Resolution details will be displayed here after
+                        the complaint is resolved.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= ADMIN DASHBOARD ================= -->
+
+            <section class="page" id="admin">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Administrator Dashboard</h1>
+                        <p>Monitor and manage college complaints.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div>
+                            <p>Total Complaints</p>
+                            <h2>248</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p>New Complaints</p>
+                            <h2>27</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p>In Progress</p>
+                            <h2>64</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-spinner"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p>Resolved</p>
+                            <h2>157</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Monthly Complaint Trend</h3>
+                        </div>
+
+                        <div class="chart">
+
+                            <div class="bar" style="height:45%;">
+                                <strong>42</strong>
+                                <span>Mar</span>
+                            </div>
+
+                            <div class="bar" style="height:60%;">
+                                <strong>58</strong>
+                                <span>Apr</span>
+                            </div>
+
+                            <div class="bar" style="height:50%;">
+                                <strong>49</strong>
+                                <span>May</span>
+                            </div>
+
+                            <div class="bar" style="height:75%;">
+                                <strong>72</strong>
+                                <span>Jun</span>
+                            </div>
+
+                            <div class="bar" style="height:85%;">
+                                <strong>83</strong>
+                                <span>Jul</span>
+                            </div>
+
+                            <div class="bar" style="height:65%;">
+                                <strong>64</strong>
+                                <span>Aug</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Complaints by Category</h3>
+                        </div>
+
+                        <div class="donut"></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3>High Priority Complaints</h3>
+
+                        <span class="badge high">
+                            12 Active
+                        </span>
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Complaint</th>
+                                <th>Department</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td>#CMP1024</td>
+                                <td>Wi-Fi connectivity issue</td>
+                                <td>IT</td>
+                                <td>
+                                    <span class="badge high">High</span>
+                                </td>
+                                <td>
+                                    <span class="badge progress">
+                                        In Progress
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>#CMP1018</td>
+                                <td>Hostel water supply</td>
+                                <td>Hostel</td>
+                                <td>
+                                    <span class="badge high">High</span>
+                                </td>
+                                <td>
+                                    <span class="badge pending">
+                                        Pending
+                                    </span>
+                                </td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= ADMIN COMPLAINTS ================= -->
+
+            <section class="page" id="adminComplaints">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Complaint Management</h1>
+                        <p>Search, assign and update complaints.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="form-grid">
+
+                        <input class="form-control"
+                               placeholder="Search Complaint ID / Title">
+
+                        <select class="form-control">
+                            <option>All Categories</option>
+                            <option>Classroom</option>
+                            <option>Hostel</option>
+                            <option>IT/Network</option>
+                            <option>Transport</option>
+                        </select>
+
+                        <select class="form-control">
+                            <option>All Status</option>
+                            <option>Pending</option>
+                            <option>Under Review</option>
+                            <option>Assigned</option>
+                            <option>In Progress</option>
+                            <option>Resolved</option>
+                            <option>Rejected</option>
+                        </select>
+
+                        <select class="form-control">
+                            <option>All Priorities</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Student</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Department</th>
+                                <th>Action</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td>#CMP1024</td>
+                                <td>Jinesh</td>
+                                <td>Wi-Fi issue</td>
+                                <td>IT/Network</td>
+                                <td>
+                                    <span class="badge high">High</span>
+                                </td>
+                                <td>
+                                    <span class="badge progress">
+                                        In Progress
+                                    </span>
+                                </td>
+                                <td>IT</td>
+                                <td>
+                                    <button class="action-btn"
+                                            onclick="showPage('details')">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+
+                                    <button class="action-btn"
+                                            onclick="showToast('Complaint updated successfully')">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>#CMP1023</td>
+                                <td>Arun</td>
+                                <td>Projector issue</td>
+                                <td>Classroom</td>
+                                <td>
+                                    <span class="badge medium">Medium</span>
+                                </td>
+                                <td>
+                                    <span class="badge pending">
+                                        Pending
+                                    </span>
+                                </td>
+                                <td>Administration</td>
+                                <td>
+                                    <button class="action-btn"
+                                            onclick="showPage('details')">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+
+                                    <button class="action-btn"
+                                            onclick="showToast('Complaint assigned successfully')">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= DEPARTMENTS ================= -->
+
+            <section class="page" id="departments">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Departments</h1>
+                        <p>Manage complaint handling departments.</p>
+                    </div>
+
+                    <button class="primary-btn"
+                            onclick="showToast('Add Department feature ready')">
+
+                        <i class="fa-solid fa-plus"></i>
+                        Add Department
+
+                    </button>
+
+                </div>
+
+
+                <div class="department-grid">
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h3>CSE</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            Computer Science
+                        </p>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <h3>IT</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            Information Technology
+                        </p>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <h3>ECE</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            Electronics
+                        </p>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <h3>Mechanical</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            Mechanical Engineering
+                        </p>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <h3>Civil</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            Civil Engineering
+                        </p>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h3>Administration</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            College Administration
+                        </p>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-bed"></i>
+                        </div>
+                        <h3>Hostel</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            Hostel Management
+                        </p>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon">
+                            <i class="fa-solid fa-bus"></i>
+                        </div>
+                        <h3>Transport</h3>
+                        <p style="color:var(--muted);margin-top:7px;">
+                            College Transport
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= REPORTS ================= -->
+
+            <section class="page" id="reports">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>Reports & Analytics</h1>
+                        <p>Analyze complaint performance and trends.</p>
+                    </div>
+
+                    <button class="primary-btn"
+                            onclick="exportCSV()">
+
+                        <i class="fa-solid fa-download"></i>
+                        Export CSV
+
+                    </button>
+
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div>
+                            <p>Total Complaints</p>
+                            <h2>248</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-file"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p>Resolved Percentage</p>
+                            <h2>63%</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p>Pending Percentage</p>
+                            <h2>11%</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p>Average Resolution</p>
+                            <h2>2.4d</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-stopwatch"></i>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Monthly Statistics</h3>
+                        </div>
+
+                        <div class="chart">
+
+                            <div class="bar" style="height:40%;">
+                                <strong>40</strong>
+                                <span>Mar</span>
+                            </div>
+
+                            <div class="bar" style="height:55%;">
+                                <strong>55</strong>
+                                <span>Apr</span>
+                            </div>
+
+                            <div class="bar" style="height:65%;">
+                                <strong>65</strong>
+                                <span>May</span>
+                            </div>
+
+                            <div class="bar" style="height:75%;">
+                                <strong>75</strong>
+                                <span>Jun</span>
+                            </div>
+
+                            <div class="bar" style="height:90%;">
+                                <strong>90</strong>
+                                <span>Jul</span>
+                            </div>
+
+                            <div class="bar" style="height:70%;">
+                                <strong>70</strong>
+                                <span>Aug</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Status Distribution</h3>
+                        </div>
+
+                        <div class="donut"></div>
+
+                        <div style="margin-top:20px;line-height:2;">
+
+                            <p>
+                                🟦 Pending — 11%
+                            </p>
+
+                            <p>
+                                🟦 In Progress — 26%
+                            </p>
+
+                            <p>
+                                🟩 Resolved — 63%
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3>Department-wise Complaints</h3>
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                            <tr>
+                                <th>Department</th>
+                                <th>Total</th>
+                                <th>Resolved</th>
+                                <th>Pending</th>
+                                <th>Resolution Rate</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td>CSE</td>
+                                <td>58</td>
+                                <td>42</td>
+                                <td>16</td>
+                                <td>72%</td>
+                            </tr>
+
+                            <tr>
+                                <td>IT</td>
+                                <td>47</td>
+                                <td>36</td>
+                                <td>11</td>
+                                <td>77%</td>
+                            </tr>
+
+                            <tr>
+                                <td>Hostel</td>
+                                <td>51</td>
+                                <td>29</td>
+                                <td>22</td>
+                                <td>57%</td>
+                            </tr>
+
+                            <tr>
+                                <td>Administration</td>
+                                <td>39</td>
+                                <td>31</td>
+                                <td>8</td>
+                                <td>79%</td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= PROFILE ================= -->
+
+            <section class="page" id="profile">
+
+                <div class="page-header">
+
+                    <div>
+                        <h1>My Profile</h1>
+                        <p>Manage your account information.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="profile-header">
+
+                        <div class="large-avatar">
+                            JS
+                        </div>
+
+                        <div>
+                            <h2>Jinesh S</h2>
+                            <p style="color:var(--muted);">
+                                Student · Computer Science
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>Full Name</label>
+
+                            <input class="form-control"
+                                   value="Jinesh S">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Email</label>
+
+                            <input class="form-control"
+                                   value="jinesh@example.com">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Student ID</label>
+
+                            <input class="form-control"
+                                   value="STU2026"
+                                   readonly>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Department</label>
+
+                            <select class="form-control">
+
+                                <option selected>CSE</option>
+                                <option>IT</option>
+                                <option>ECE</option>
+                                <option>Mechanical</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <button class="primary-btn"
+                            onclick="showToast('Profile updated successfully')">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Change Password</h3>
+
+                    <div class="form-grid"
+                         style="margin-top:20px;">
+
+                        <input class="form-control"
+                               type="password"
+                               placeholder="Current password">
+
+                        <input class="form-control"
+                               type="password"
+                               placeholder="New password">
+
+                    </div>
+
+                    <br>
+
+                    <button class="primary-btn"
+                            onclick="showToast('Password changed successfully')">
+
+                        Change Password
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+</section>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMessage">Success</span>
+</div>
+
+
+<script>
+
+    /* CURRENT ROLE */
+
+    let currentRole = "student";
+
+
+    /* LOGIN ROLE */
+
+    function setRole(role, button) {
+
+        currentRole = role;
+
+        document
+            .querySelectorAll(".role-switch button")
+            .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+    }
+
+
+    /* LOGIN */
+
+    function login(event) {
+
+        event.preventDefault();
+
+        const username =
+            document.getElementById("username").value;
+
+        const password =
+            document.getElementById("password").value;
+
+        if (
+            (currentRole === "student" &&
+             username === "student" &&
+             password === "1234")
+            ||
+            (currentRole === "admin" &&
+             username === "admin" &&
+             password === "admin123")
+        ) {
+
+            document.getElementById("loginPage").style.display = "none";
+
+            document.getElementById("app").style.display = "block";
+
+            document.getElementById("topRole").textContent =
+                currentRole === "admin"
+                ? "Administrator"
+                : "Student";
+
+            if (currentRole === "admin") {
+
+                showPage("admin");
+
+            } else {
+
+                showPage("dashboard");
+
+            }
+
+            showToast("Login successful!");
+
+        } else {
+
+            showToast("Invalid username or password");
+
+        }
+
+    }
+
+
+    /* NAVIGATION */
+
+    function showPage(pageId, element = null) {
+
+        document
+            .querySelectorAll(".page")
+            .forEach(page => page.classList.remove("active"));
+
+        const page =
+            document.getElementById(pageId);
+
+        if (page) {
+            page.classList.add("active");
+        }
+
+        document
+            .querySelectorAll(".nav-item")
+            .forEach(item => item.classList.remove("active"));
+
+        if (element) {
+            element.classList.add("active");
+        }
+
+        document
+            .getElementById("sidebar")
+            .classList.remove("open");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    /* SIDEBAR */
+
+    function toggleSidebar() {
+
+        document
+            .getElementById("sidebar")
+            .classList.toggle("open");
+
+    }
+
+
+    /* DARK MODE */
+
+    function toggleDarkMode() {
+
+        document
+            .body
+            .classList
+            .toggle("dark");
+
+        const icon =
+            document.querySelector(".top-actions .icon-btn i");
+
+        if (document.body.classList.contains("dark")) {
+
+            icon.classList.remove("fa-moon");
+            icon.classList.add("fa-sun");
+
+        } else {
+
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+
+        }
+
+    }
+
+
+    /* SUBMIT COMPLAINT */
+
+    function submitComplaint(event) {
+
+        event.preventDefault();
+
+        showToast(
+            "Complaint submitted successfully! Complaint ID: #CMP1025"
+        );
+
+        event.target.reset();
+
+        setTimeout(() => {
+
+            showPage("complaints");
+
+        }, 1200);
+
+    }
+
+
+    /* TOAST */
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById("toast");
+
+        document.getElementById("toastMessage")
+            .textContent = message;
+
+        toast.style.display = "block";
+
+        setTimeout(() => {
+
+            toast.style.display = "none";
+
+        }, 3000);
+
+    }
+
+
+    /* CSV EXPORT */
+
+    function exportCSV() {
+
+        const csv =
+`Complaint ID,Student,Category,Priority,Status,Department
+CMP1024,Jinesh,IT/Network,High,In Progress,IT
+CMP1023,Arun,Classroom,Medium,Pending,Administration
+CMP1020,Karthik,Hostel,High,Resolved,Hostel`;
+
+        const blob =
+            new Blob([csv], {type:"text/csv"});
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const a =
+            document.createElement("a");
+
+        a.href = url;
+
+        a.download =
+            "complaints_report.csv";
+
+        a.click();
+
+        URL.revokeObjectURL(url);
+
+        showToast("CSV report exported successfully");
+
+    }
+
+
+    /* FILTER BUTTONS */
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(button => {
+
+            button.addEventListener("click", function() {
+
+                const parent =
+                    this.parentElement;
+
+                parent
+                    .querySelectorAll(".filter-btn")
+                    .forEach(btn =>
+                        btn.classList.remove("active")
+                    );
+
+                this.classList.add("active");
+
+            });
+
+        });
+
+
+    /* LOGOUT */
+
+    function logout() {
+
+        document.getElementById("app").style.display = "none";
+
+        document.getElementById("loginPage").style.display = "flex";
+
+        document.getElementById("username").value = "";
+
+        document.getElementById("password").value = "";
+
+        showToast("Logged out successfully");
+
+    }
+
+</script>
+
+</body>
+</html>
+```

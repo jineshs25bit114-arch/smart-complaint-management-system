@@ -1,0 +1,809 @@
+from flask import Flask, request, render_template_string
+import random
+
+app = Flask(__name__)
+
+complaints = []
+
+
+HTML = """
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Complaint Management System</title>
+
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --primary: #2563EB;
+    --primary-dark: #1D4ED8;
+    --navy: #0F172A;
+    --accent: #06B6D4;
+    --background: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #1E293B;
+    --muted: #64748B;
+    --success: #16A34A;
+    --warning: #F59E0B;
+    --danger: #DC2626;
+    --border: #E2E8F0;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* NAVBAR */
+
+nav {
+    background: var(--card);
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text);
+    margin-left: 25px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+/* HERO */
+
+.hero {
+    min-height: 550px;
+    display: flex;
+    align-items: center;
+    padding: 60px 8%;
+    background: linear-gradient(135deg, #EFF6FF, #F8FAFC);
+}
+
+.hero-content {
+    max-width: 700px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--navy);
+}
+
+.hero p {
+    font-size: 19px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 25px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* FEATURES */
+
+.features {
+    padding: 70px 8%;
+    text-align: center;
+    background: var(--background);
+}
+
+.title {
+    font-size: 32px;
+    margin-bottom: 40px;
+    color: var(--navy);
+}
+
+.feature-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: var(--card);
+    width: 280px;
+    padding: 30px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.12);
+}
+
+.card h3 {
+    margin-bottom: 15px;
+    color: var(--navy);
+}
+
+.card p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* FORM */
+
+.complaint-section {
+    background: var(--card);
+    padding: 70px 8%;
+}
+
+form {
+    max-width: 650px;
+    margin: auto;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 7px;
+    font-weight: bold;
+    color: var(--text);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    color: var(--text);
+    background: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+textarea {
+    height: 130px;
+    resize: vertical;
+}
+
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* SUCCESS */
+
+.success {
+    max-width: 650px;
+    margin: 25px auto;
+    padding: 20px;
+    background: #F0FDF4;
+    border: 1px solid #86EFAC;
+    border-radius: 10px;
+    line-height: 1.8;
+}
+
+.success h3 {
+    color: var(--success);
+}
+
+/* TRACK */
+
+.track {
+    padding: 70px 8%;
+    text-align: center;
+    background: #EFF6FF;
+}
+
+.track input {
+    width: 300px;
+    max-width: 90%;
+}
+
+.track button {
+    width: 200px;
+}
+
+/* COMPLAINT LIST */
+
+.complaints {
+    padding: 70px 8%;
+    background: var(--background);
+}
+
+.complaint {
+    background: var(--card);
+    padding: 20px;
+    margin: 15px auto;
+    max-width: 800px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+}
+
+.complaint h3 {
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.complaint p {
+    margin: 7px 0;
+    color: var(--muted);
+}
+
+/* ABOUT */
+
+.about {
+    padding: 70px 12%;
+    text-align: center;
+    background: var(--card);
+}
+
+.about p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+/* FOOTER */
+
+footer {
+    background: var(--navy);
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px) {
+
+    nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav a {
+        margin-left: 10px;
+    }
+
+    .hero {
+        padding: 50px 7%;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+<div class="logo">
+SmartComplaint
+</div>
+
+<div>
+<a href="#home">Home</a>
+<a href="#complaint">Complaint</a>
+<a href="#track">Track</a>
+<a href="#about">About</a>
+</div>
+
+</nav>
+
+
+<!-- HOME -->
+
+<section id="home" class="hero">
+
+<div class="hero-content">
+
+<h1>
+Smart Complaint
+<br>
+Management System
+</h1>
+
+<p>
+Report your problems easily, track your complaints,
+and get faster solutions using our smart complaint
+management system.
+</p>
+
+<a href="#complaint" class="btn">
+Submit Complaint
+</a>
+
+</div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+<h2 class="title">
+Why Use SmartComplaint?
+</h2>
+
+<div class="feature-container">
+
+<div class="card">
+
+<h3>📝 Easy Submission</h3>
+
+<p>
+Submit complaints quickly using a simple form.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>⚡ Smart Priority</h3>
+
+<p>
+The system automatically identifies complaint priority.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>🔍 Easy Tracking</h3>
+
+<p>
+Track your complaint using a unique complaint ID.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- COMPLAINT FORM -->
+
+<section id="complaint" class="complaint-section">
+
+<h2 class="title" style="text-align:center;">
+Submit Your Complaint
+</h2>
+
+<form method="POST" action="/submit">
+
+<label>Name</label>
+
+<input
+type="text"
+name="name"
+placeholder="Enter your name"
+required
+>
+
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+placeholder="Enter your email"
+required
+>
+
+
+<label>Category</label>
+
+<select name="category" required>
+
+<option value="">
+Select Category
+</option>
+
+<option>IT / Computer</option>
+
+<option>Electrical</option>
+
+<option>Plumbing</option>
+
+<option>Cleanliness</option>
+
+<option>Security</option>
+
+<option>Infrastructure</option>
+
+<option>Other</option>
+
+</select>
+
+
+<label>Complaint Description</label>
+
+<textarea
+name="description"
+placeholder="Describe your complaint..."
+required></textarea>
+
+
+<label>Location</label>
+
+<input
+type="text"
+name="location"
+placeholder="Enter location"
+required
+>
+
+
+<button type="submit">
+Submit Complaint
+</button>
+
+</form>
+
+{% if submitted %}
+
+<div class="success">
+
+<h3>✅ Complaint Submitted Successfully!</h3>
+
+<p>
+<b>Complaint ID:</b> {{ complaint.id }}
+</p>
+
+<p>
+<b>Name:</b> {{ complaint.name }}
+</p>
+
+<p>
+<b>Category:</b> {{ complaint.category }}
+</p>
+
+<p>
+<b>Priority:</b> {{ complaint.priority }}
+</p>
+
+<p>
+<b>Department:</b> {{ complaint.department }}
+</p>
+
+<p>
+<b>Status:</b> {{ complaint.status }}
+</p>
+
+</div>
+
+{% endif %}
+
+</section>
+
+
+<!-- TRACK -->
+
+<section id="track" class="track">
+
+<h2 class="title">
+Track Your Complaint
+</h2>
+
+<form method="GET" action="/track">
+
+<input
+type="text"
+name="id"
+placeholder="Enter Complaint ID"
+required
+>
+
+<button type="submit">
+Track Complaint
+</button>
+
+</form>
+
+
+{% if tracked %}
+
+<div class="success">
+
+<h3>📋 Complaint Found</h3>
+
+<p>
+<b>Complaint ID:</b>
+{{ tracked.id }}
+</p>
+
+<p>
+<b>Category:</b>
+{{ tracked.category }}
+</p>
+
+<p>
+<b>Priority:</b>
+{{ tracked.priority }}
+</p>
+
+<p>
+<b>Department:</b>
+{{ tracked.department }}
+</p>
+
+<p>
+<b>Status:</b>
+{{ tracked.status }}
+</p>
+
+</div>
+
+{% elif searched %}
+
+<div class="success">
+
+<h3>❌ Complaint Not Found</h3>
+
+<p>
+Please check your Complaint ID.
+</p>
+
+</div>
+
+{% endif %}
+
+</section>
+
+
+<!-- COMPLAINT LIST -->
+
+<section class="complaints">
+
+<h2 class="title" style="text-align:center;">
+Recent Complaints
+</h2>
+
+{% for c in complaints %}
+
+<div class="complaint">
+
+<h3>
+Complaint #{{ c.id }}
+</h3>
+
+<p>
+<b>Category:</b>
+{{ c.category }}
+</p>
+
+<p>
+<b>Priority:</b>
+{{ c.priority }}
+</p>
+
+<p>
+<b>Department:</b>
+{{ c.department }}
+</p>
+
+<p>
+<b>Status:</b>
+{{ c.status }}
+</p>
+
+</div>
+
+{% endfor %}
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section id="about" class="about">
+
+<h2 class="title">
+About The System
+</h2>
+
+<p>
+Smart Complaint Management System provides a centralized
+platform for submitting, prioritizing and tracking complaints.
+It helps users report problems easily and allows the system
+to identify the appropriate priority and department.
+</p>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<p>
+© 2026 Smart Complaint Management System
+</p>
+
+</footer>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+console.log(
+"Smart Complaint Management System Loaded"
+);
+
+</script>
+
+</body>
+
+</html>
+"""
+
+
+# HOME PAGE
+
+@app.route("/")
+def home():
+
+    return render_template_string(
+        HTML,
+        complaints=complaints,
+        submitted=False,
+        tracked=None,
+        searched=False
+    )
+
+
+# SUBMIT COMPLAINT
+
+@app.route("/submit", methods=["POST"])
+def submit():
+
+    name = request.form["name"]
+    email = request.form["email"]
+    category = request.form["category"]
+    description = request.form["description"]
+    location = request.form["location"]
+
+
+    # SMART PRIORITY
+
+    text = (
+        category + " " + description
+    ).lower()
+
+
+    if (
+        "danger" in text
+        or "emergency" in text
+        or "safety" in text
+    ):
+
+        priority = "Critical"
+
+    elif (
+        "water" in text
+        or "security" in text
+        or "electricity" in text
+    ):
+
+        priority = "High"
+
+    elif (
+        "wifi" in text
+        or "computer" in text
+        or "fan" in text
+    ):
+
+        priority = "Medium"
+
+    else:
+
+        priority = "Low"
+
+
+    # DEPARTMENT ASSIGNMENT
+
+    if "IT" in category:
+
+        department = "IT Department"
+
+    elif category == "Electrical":
+
+        department = "Maintenance Department"
+
+    elif category == "Plumbing":
+
+        department = "Facilities Department"
+
+    elif category == "Security":
+
+        department = "Security Department"
+
+    elif category == "Cleanliness":
+
+        department = "Housekeeping Department"
